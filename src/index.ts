@@ -14,7 +14,7 @@ export const handleMain = async () => {
     if(!topTrack) return
 
     // Spotify で曲を検索
-    const spotifyTrack = await getTrackFromSpotify(topTrack.name, topTrack.artist["#text"])
+    const spotifyTrack = await getTrackFromSpotify(topTrack.name, topTrack.artist.name)
     if(!spotifyTrack) return
 
     // Spotify から歌詞を取得
@@ -33,7 +33,7 @@ export const handleMain = async () => {
     database.from('songs').insert({
         date: moment().format('YYYY/MM/DD'),
         name: topTrack.name,
-        artist: topTrack.artist["#text"],
+        artist: topTrack.artist.name,
         imageUrl: spotifyTrack.album.images[0].url,
         spotifyId: spotifyTrack.id,
         lyrics: l
