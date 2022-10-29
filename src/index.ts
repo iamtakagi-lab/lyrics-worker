@@ -42,7 +42,7 @@ export const handleMain = async () => {
             console.log(error)
             return false
         }
-        await updateAccountProfile(`${l ? l.join(" ") : "歌詞情報がありません "} https://lyrics.iamtakagi.vercel.app/${moment().format('YYYY/MM/DD')}`);
+        await updateAccountProfile(`${l ? l.join(" ") : "歌詞情報がありません "} https://${process.env.SITE_DOMAIN ?? ''}}/${moment().format('YYYY/MM/DD')}`);
     });
 }
 

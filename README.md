@@ -5,6 +5,9 @@
 ### Environment Variables
 以下の環境変数が必要です
 ```env
+# Common
+SITE_DOMAIN=
+
 # last.fm
 LASTFM_USER_ID=
 LASTFM_API_KEY=
