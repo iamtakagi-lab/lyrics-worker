@@ -60,7 +60,7 @@ export const getLyricsFromSpotify = async (trackId: string) => {
           .map((_, i) => array.slice(i * n, (i + 1) * n));
       };
       const lyrics = sliceByNumber(array, 4);
-      console.log(JSON.stringify(lyrics))
+      //console.log(JSON.stringify(lyrics))
       return lyrics; // 4個セットに配列化して返却
     });
   } catch (err) {
