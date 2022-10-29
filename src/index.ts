@@ -4,7 +4,7 @@ import { getTopTrackFromLastfm } from "./lastfm.js"
 import { getTrackFromSpotify } from "./spotify.js"
 import { getLyricsFromSpotify } from "./lyrics.js"
 import { database } from "./supabase.js"
-import { updateAccountProfile } from "./twitter.js"
+import { postTweet, updateAccountProfile } from "./twitter.js"
 import moment from "moment";
 import "moment/locale/ja.js";
 
@@ -42,7 +42,11 @@ export const handleMain = async () => {
             console.log(error)
             return false
         }
-        await updateAccountProfile(`${l ? l.join(" ") : "歌詞情報がありません "} https://${process.env.SITE_DOMAIN ?? ''}/${moment().format('YYYY/MM/DD')}`);
+        const dateUrl = `https://${process.env.SITE_DOMAIN ?? ''}/${moment().format('YYYY/MM/DD')}`
+        Promise.all([
+            await updateAccountProfile(`${l ? l.join(" ") : "歌詞情報がありません "} ${dateUrl}`),
+            await postTweet(dateUrl)
+        ])
     });
 }
 
