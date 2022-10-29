@@ -26,7 +26,7 @@ ENV TZ Asia/Tokyo
 # Build App
 ENV NODE_ENV production
 
-WORKDIR /app/lyrics
+WORKDIR /app
 
 COPY package.json yarn.lock ./
 RUN yarn install --immutable 
@@ -40,7 +40,7 @@ RUN yarn build
 
 FROM base
 
-COPY --from=builder /app/lyrics/dist ./dist
+COPY --from=builder /app/dist ./dist
 
 # Add Crontab
 ADD crontab /var/spool/crontab/root
