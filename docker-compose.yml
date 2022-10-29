@@ -9,3 +9,4 @@ services:
       TZ: Asia/Tokyo
     env_file:
       - .env
+    restart: unless-stopped
