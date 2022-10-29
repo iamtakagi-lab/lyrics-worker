@@ -44,8 +44,8 @@ export const handleMain = async () => {
         }
         const dateUrl = `https://${process.env.SITE_DOMAIN ?? ''}/${moment().format('YYYY/MM/DD')}`
         Promise.all([
-            await updateAccountProfile(`${l ? l.join(" ") : "歌詞情報がありません "} ${dateUrl}`),
-            await postTweet(dateUrl)
+            updateAccountProfile(`${l ? l.join(" ") : "歌詞情報がありません "} ${dateUrl}`),
+            postTweet(dateUrl)
         ])
     });
 }
