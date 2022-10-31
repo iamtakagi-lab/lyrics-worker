@@ -37,7 +37,7 @@ export const getTrackFromSpotify = async (track: string, artist: string) => {
     },
   });
   const params = new URLSearchParams();
-  params.append("q", `remaster&track:${track}&artist:${artist}`);
+  params.append("q", `remaster%20track:${track}%20artist:${artist}`);
   params.append("type", "track");
   params.append("market", "JP");
   params.append("limit", "1");
