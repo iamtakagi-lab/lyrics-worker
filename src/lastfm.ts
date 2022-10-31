@@ -3,7 +3,7 @@ import axios from 'axios';
 export const getTopTrackFromLastfm = async () => {
     const client = axios.create()
     const params = new URLSearchParams()
-    params.append("method", "user.gettoptracks")
+    params.append("method", "user.getTopTracks")
     params.append("user", process.env.LASTFM_USER_ID ?? "")
     params.append("limit", "1")
     params.append("api_key", process.env.LASTFM_API_KEY ?? "")
