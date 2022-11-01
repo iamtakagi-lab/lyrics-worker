@@ -1,28 +1,30 @@
 import axios from "axios";
-import querystring from 'node:querystring'
+import querystring from "node:querystring";
 
 const getAccessToken = async () => {
-  const clientId = process.env.SPOTIFY_CLIENT_ID ?? ''
-  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET ?? ''
-  const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN ?? ''
+  const clientId = process.env.SPOTIFY_CLIENT_ID ?? "";
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET ?? "";
+  const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN ?? "";
   const config = {
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`
-    }
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${Buffer.from(
+        `${clientId}:${clientSecret}`
+      ).toString("base64")}`,
+    },
   };
   const data = {
-    grant_type: 'refresh_token',
+    grant_type: "refresh_token",
     refresh_token: refreshToken,
   };
   try {
     const response = await axios.post<SpotifyAccessTokenResponse>(
-      'https://accounts.spotify.com/api/token',
+      "https://accounts.spotify.com/api/token",
       querystring.stringify(data),
       config
     );
-    return response.data.access_token
+    return response.data.access_token;
   } catch (error) {
     console.log(error);
   }
@@ -30,7 +32,7 @@ const getAccessToken = async () => {
 
 export const getTrackFromSpotify = async (track: string, artist: string) => {
   const accessToken = await getAccessToken();
-  if(!accessToken) return
+  if (!accessToken) return;
   const client = axios.create({
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -54,9 +56,9 @@ export const getTrackFromSpotify = async (track: string, artist: string) => {
 };
 
 interface SpotifyAccessTokenResponse {
-  access_token: string  
-  token_type: string
-  expires_in: number
+  access_token: string;
+  token_type: string;
+  expires_in: number;
 }
 
 declare module SpotifySearchTrackResponse {

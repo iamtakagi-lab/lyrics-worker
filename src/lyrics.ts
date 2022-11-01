@@ -10,9 +10,9 @@ export const getLyricsFromSpotify = async (trackId: string) => {
       ...process.env,
       LANG: "ja_JP.UTF-8",
     },
-    args: ['--no-sandbox', '--disabled-setuid-sandbox'],
+    args: ["--no-sandbox", "--disabled-setuid-sandbox"],
     headless: true,
-    slowMo: 5
+    slowMo: 5,
   });
   const page = await browser.newPage();
   await page.setBypassCSP(true);
@@ -28,7 +28,6 @@ export const getLyricsFromSpotify = async (trackId: string) => {
     await page.waitForNavigation({
       waitUntil: "domcontentloaded",
     });
-  
   } catch (err) {
     console.log(err);
   }
@@ -51,8 +50,8 @@ export const getLyricsFromSpotify = async (trackId: string) => {
             elm.textContent != "" &&
             elm.textContent.length
         )
-        .map((elm) => elm.textContent!.trim())
-      // evaluate 内から外部関数を呼び出すとエラーになるのでここに定義
+        .map((elm) => elm.textContent!.trim());
+      // 外部関数を呼び出すとエラーになるので evaluate 内に定義
       const sliceByNumber = (array: string[], n: number) => {
         const length = Math.ceil(array.length / n);
         return new Array(length)
