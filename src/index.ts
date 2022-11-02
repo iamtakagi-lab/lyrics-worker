@@ -9,6 +9,13 @@ import moment from "moment";
 import "moment/locale/ja.js";
 
 export const handleMain = async () => {
+  // 同日データ重複不可
+  const { data, error, status } = await database
+    .from("songs")
+    .select("date")
+    .filter("date", "eq", moment().format("YYYY/MM/DD"));
+  if ((data && data.length) || error) return; //既にデータがあったらリターン
+
   // 直近のトップソングを取得
   const topTrack = await getTopTrackFromLastfm();
   if (!topTrack) return;
@@ -28,13 +35,6 @@ export const handleMain = async () => {
   if (lyrics) {
     l = lyrics[Math.floor(Math.random() * lyrics.length)];
   }
-
-  // 同日データ重複不可
-  const { data, error, status } = await database
-    .from("songs")
-    .select("date")
-    .filter("date", "eq", moment().format("YYYY/MM/DD"));
-  if ((data && data.length) || error) return; //既にデータがあったらリターン
 
   database
     .from("songs")
