@@ -4,9 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev:tsc": "tsc -w --preserveWatchOutput",
-    "dev:run": "node ./dist/index.js",
-    "dev": "run-p \"dev:*\"",
+    "dev": "node --loader ts-node/esm ./src/index.ts",
     "build": "tsc"
   },
   "engines": {
