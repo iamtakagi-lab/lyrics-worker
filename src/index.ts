@@ -49,7 +49,7 @@ export const handleMain = async () => {
     .then(async ({ data, error, status }) => {
       if (error) {
         console.log(error);
-        return false;
+        return;
       }
       const dateUrl = `https://${
         process.env.SITE_DOMAIN ?? ""
