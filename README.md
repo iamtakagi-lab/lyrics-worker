@@ -1,4 +1,4 @@
-# lyrics.worker
+# lyrics-worker
 
 ## Getting Started
 
