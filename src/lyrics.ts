@@ -1,8 +1,5 @@
 import puppeteer from "puppeteer";
-
-async function wait(delay: number) {
-  return new Promise((resolve) => setTimeout(resolve, delay));
-}
+import { sleep } from "./utils.js";
 
 export const getLyricsFromSpotify = async (trackId: string) => {
   const browser = await puppeteer.launch({
@@ -21,9 +18,9 @@ export const getLyricsFromSpotify = async (trackId: string) => {
   try {
     await page.goto(`https://accounts.spotify.com/ja/login`);
     await page.click("#login-username");
-    await page.type("#login-username", process.env.SPOTIFY_EMAIL ?? "");
+    await page.type("#login-username", process.env.SPOTIFY_EMAIL ?? '');
     await page.click("#login-password");
-    await page.type("#login-password", process.env.SPOTIFY_PASSWORD ?? "");
+    await page.type("#login-password", process.env.SPOTIFY_PASSWORD ?? '');
     await page.click("#login-button");
     await page.waitForNavigation({
       waitUntil: "domcontentloaded",
@@ -37,7 +34,8 @@ export const getLyricsFromSpotify = async (trackId: string) => {
       waitUntil: "domcontentloaded",
     });
 
-    await wait(5000);
+    // 5秒待機
+    await sleep(5000);
 
     return await page.evaluate(async () => {
       const a = Array.from(document.querySelectorAll("p.ipKmGr"));
@@ -52,13 +50,13 @@ export const getLyricsFromSpotify = async (trackId: string) => {
         )
         .map((elm) => elm.textContent!.trim());
       // 外部関数を呼び出すとエラーになるので evaluate 内に定義
-      const sliceByNumber = (array: string[], n: number) => {
+      const sliceByNum = (array: string[], n: number) => {
         const length = Math.ceil(array.length / n);
         return new Array(length)
           .fill("")
           .map((_, i) => array.slice(i * n, (i + 1) * n));
       };
-      const lyrics = sliceByNumber(array, 4);
+      const lyrics = sliceByNum(array, 4);
       //console.log(JSON.stringify(lyrics))
       return lyrics; // 4個セットに配列化して返却
     });
