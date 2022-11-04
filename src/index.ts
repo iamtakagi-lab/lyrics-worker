@@ -1,39 +1,39 @@
-process.env.TZ = "Asia/Tokyo";
+process.env.TZ = "Asia/Tokyo"
 
-import { getTopTrackFromLastfm } from "./lastfm.js";
-import { getTrackFromSpotify } from "./spotify.js";
-import { getLyricsFromSpotify } from "./lyrics.js";
-import { database } from "./supabase.js";
-import { postTweet, updateAccountProfile } from "./twitter.js";
-import moment from "moment";
-import "moment/locale/ja.js";
+import { getTopTrackFromLastfm } from "./lastfm.js"
+import { getTrackFromSpotify } from "./spotify.js"
+import { getLyricsFromSpotify } from "./lyrics.js"
+import { database } from "./supabase.js"
+import { postTweet, updateAccountProfile } from "./twitter.js"
+import moment from "moment"
+import "moment/locale/ja.js"
 
 export const handleMain = async () => {
   // 同日データ重複不可
   const { data, error, status } = await database
     .from("songs")
     .select("date")
-    .filter("date", "eq", moment().format("YYYY/MM/DD"));
-  if ((data && data.length) || error) return; //既にデータがあったらリターン
+    .filter("date", "eq", moment().format("YYYY/MM/DD"))
+  if ((data && data.length) || error) return //既にデータがあったらリターン
 
   // 直近のトップソングを取得
-  const topTrack = await getTopTrackFromLastfm();
-  if (!topTrack) return;
+  const topTrack = await getTopTrackFromLastfm()
+  if (!topTrack) return
 
   // Spotify で曲を検索
   const spotifyTrack = await getTrackFromSpotify(
     topTrack.name,
     topTrack.artist.name
-  );
-  if (!spotifyTrack) return;
+  )
+  if (!spotifyTrack) return
 
   // Spotify から歌詞を取得
-  const lyrics = await getLyricsFromSpotify(spotifyTrack.id);
+  const lyrics = await getLyricsFromSpotify(spotifyTrack.id)
 
-  let l: string[] = [];
+  let l: string[] = []
 
   if (lyrics) {
-    l = lyrics[Math.floor(Math.random() * lyrics.length)];
+    l = lyrics[Math.floor(Math.random() * lyrics.length)]
   }
 
   database
@@ -48,21 +48,21 @@ export const handleMain = async () => {
     })
     .then(async ({ data, error, status }) => {
       if (error) {
-        console.log(error);
-        return;
+        console.log(error)
+        return
       }
       const dateUrl = `https://${
         process.env.SITE_DOMAIN ?? ""
-      }/${moment().format("YYYY/MM/DD")}`;
+      }/${moment().format("YYYY/MM/DD")}`
       Promise.all([
         updateAccountProfile(
           `${l ? l.join(" ") : "歌詞情報がありません "} ${dateUrl}`
         ),
         postTweet(dateUrl),
-      ]);
-    });
-};
+      ])
+    })
+}
 
-(async () => {
-  await handleMain();
-})();
+;(async () => {
+  await handleMain()
+})()
