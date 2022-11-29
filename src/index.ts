@@ -8,7 +8,7 @@ import { postTweet, updateAccountProfile } from "./twitter.js"
 import moment from "moment"
 import "moment/locale/ja.js"
 
-export const handleMain = async () => {
+const handleMain = async () => {
   // 同日データ重複不可
   const { data, error, status } = await database
     .from("songs")
